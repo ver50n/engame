@@ -18,6 +18,7 @@ class CreateQuestionOptionsTable extends Migration
             $table->integer('question_id');
             $table->string('type');
             $table->string('text');
+            $table->tinyInteger('is_answer')->default('0');
             $table->tinyInteger('is_active')->default('0');
         });
     }

@@ -15,6 +15,7 @@
                     @endif
 
                     You are logged in!
+                    <a href="{{ route('games.list') }}">Game List</a>
                 </div>
             </div>
         </div>

@@ -9,28 +9,21 @@ use Illuminate\Broadcasting\PrivateChannel;
 use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
-use App\Models\Redis\GameInstance;
+use App\Models\GameInstance;
 
-class GameInfo implements ShouldBroadcast
+class StartGame implements ShouldBroadcast
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
-    public $gameInfo;
+    public $data = [];
 
-    public function __construct($gameInstance)
+    public function __construct($game)
     {
-        $this->gameInfo = $gameInstance;
     }
     
     public function broadcastOn()
     {
         return new Channel('game');
-    }
-
-    public function broadcastWith()
-    {
-        $gameInstance = \App\Models\GameInstance::where('id', 1)->first();
-        return ['gameInfo' => $gameInstance->game_info];
     }
 
     public function broadcastAs()

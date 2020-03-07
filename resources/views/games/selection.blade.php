@@ -6,7 +6,7 @@
     <div class="game-list">
     @foreach($games as $game)
       <div class="game">
-        <a href="{{ route('games.board', ['id' => $game->id]) }}">
+        <a href="{{ route('games.board', ['gameInstanceId' => $game->id]) }}">
           {{ $game->name }}
         </a>
       </div>

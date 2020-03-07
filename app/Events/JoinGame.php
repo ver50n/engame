@@ -14,6 +14,10 @@ class JoinGame implements ShouldBroadcast
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
+    public function __construct($game)
+    {
+        
+    }
     public function broadcastOn()
     {
         return new Channel('ours_database_game');
