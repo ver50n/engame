@@ -50,7 +50,13 @@ class GameController extends Controller
 
         event(new \App\Events\GameInfo($gameInstance));
     }
-    
+
+    public function reset(Request $request)
+    {
+        $gameInstanceId = $request->gameInstanceId;
+        $gameInstance = \App\Models\GameInstance::find($gameInstanceId);
+        $gameInstance = $gameInstance->delete();
+    }    
     public function ask(Request $request)
     {
         $data = $request->all();
