@@ -217,7 +217,12 @@ class GameInstance extends Model
 
     protected static function decidePlayerOrder($data, $d)
     {
-        $initial = $data['curr_round']['current_turn'];
+        if(!$data['curr_round']['current_turn'])
+            $currTurn = ($data['curr_round']['current_turn']) ?
+                $data['curr_round']['current_turn'] :
+                $data['players'];
+
+        $initial = $currTurn;
         $removed = array_shift($initial);
         $turn[] = $removed;
         
