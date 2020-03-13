@@ -224,12 +224,12 @@ class GameInstance extends Model
 
         $initial = $currTurn;
         $removed = array_shift($initial);
-        $turn[] = $removed;
+        $initial[] = $removed;
         
-        if (($key = array_search($d, $turn)) !== false) {
-            unset($turn[$key]);
+        if (($key = array_search($d, $initial)) !== false) {
+            unset($initial[$key]);
         }
 
-        return $turn;
+        return $initial;
     }
 }
