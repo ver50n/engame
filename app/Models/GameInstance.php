@@ -28,7 +28,8 @@ class GameInstance extends Model
             ],
             'status' => 'waiting',
             'ready_state' => [],
-            'history_round' => []
+            'game_history' => [],
+            'chat_history' => [],
         ];
         $gameInfo = json_encode($gameInfo);
         
@@ -81,6 +82,16 @@ class GameInstance extends Model
         $this->save();
     }
 
+    public function chat($data)
+    {
+        $gameInfo = json_decode($this->game_info, true);
+        $gameInfo['chat_history'] = \Auth::user()->name." said : $data";
+
+        $gameInfo = json_encode($gameInfo);
+        $this->game_info = $gameInfo;
+        $this->save();
+    }
+
     public function leaveGame()
     {
         $gameInfo = json_decode($this->game_info, true);
@@ -124,8 +135,14 @@ class GameInstance extends Model
 
     public function dHint($data)
     {
+        $answerDict = [
+            0 => 'No',
+            1 => 'Yes',
+            2 => 'Hmmm'
+        ];
+
         $gameInfo = json_decode($this->game_info, true);
-        $gameInfo['curr_round']['turn_history'][] = \Auth::user()->name.' hint : '.($data['answer'] ? 'Yes' : 'No');
+        $gameInfo['curr_round']['turn_history'][] = \Auth::user()->name.' hint : '.$answerDict[$data['answer']]);
         $gameInfo['curr_round']['current_turn'] = $this->getNextPlayer($gameInfo);
         $gameInfo = json_encode($gameInfo);
         $this->game_info = $gameInfo;
@@ -188,18 +205,26 @@ class GameInstance extends Model
 
     protected static function decideDPlayer($data)
     {
-        $dPlayer = array_rand($data['players']);
-        return $data['players'][$dPlayer];
+        $d = $data['curr_round']['d_player']
+        $players = $data['players']
+        if(!$d);
+            return $players[0];
+        
+        $dIndex = array_search($d, $players);
+        $dIndex = ($dIndex+1 > count($players)-1) ? 0 : $dIndex+1;
+        return $players[$dIndex];
     }
 
-    protected static function decidePlayerOrder($data, $dPlayer)
+    protected static function decidePlayerOrder($data, $d)
     {
-        $players = $data['players'];
-        if (($key = array_search($dPlayer, $players)) !== false) {
-            unset($players[$key]);
+        $initial = $data['curr_round']['current_turn']
+        $removed = array_shift($initial);
+        $turn[] = $removed;
+        
+        if (($key = array_search($d, $turn)) !== false) {
+            unset($turn[$key]);
         }
-        shuffle($players);
 
-        return $players;
+        return $turn
     }
 }

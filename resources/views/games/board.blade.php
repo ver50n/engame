@@ -72,6 +72,7 @@
       document.getElementById('users').innerText = gameInfo.players.join(', ');
       document.getElementById('gameStatus').innerText = gameInfo.status;
       document.getElementById('gameRound').innerText = JSON.stringify(gameInfo.curr_round);
+      document.getElementById('chat-history').innerText = JSON.stringify(gameInfo.chat_history);
     }
 
     function updateHistory() {
@@ -88,6 +89,25 @@
         url: "{{ route('games.join', ['gameInstanceId' => 1]) }}",
         method: 'GET',
         success: (ret) => {
+        }
+      });
+    }
+
+    function chat() {
+      $.ajax({
+        url: "{{ route('games.chat', ['gameInstanceId' => 1]) }}",
+        method: 'GET',
+        success: (ret) => {
+        }
+      });
+    }
+
+    function reset() {
+      $.ajax({
+        url: "{{ route('games.reset', ['gameInstanceId' => 1]) }}",
+        method: 'GET',
+        success: (ret) => {
+          alert('game refreshed');
         }
       });
     }
@@ -229,7 +249,12 @@
           <div class="btn-primary btn-action answer-question no hide" data-id="0">
             No
           </div>
+          <div class="btn-primary btn-action answer-question no hide" data-id="2">
+            Hmmm...
+          </div>
         </div>
+      </div>
+      <div class="chat-history">
       </div>
       <div class="room-info">
         @include('games._game-stat')

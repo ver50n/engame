@@ -56,13 +56,23 @@ class GameController extends Controller
         $gameInstanceId = $request->gameInstanceId;
         $gameInstance = \App\Models\GameInstance::find($gameInstanceId);
         $gameInstance = $gameInstance->delete();
-    }    
+    }
     public function ask(Request $request)
     {
         $data = $request->all();
         $gameInstanceId = $request->gameInstanceId;
         $gameInstance = \App\Models\GameInstance::find($gameInstanceId);
         $gameInstance = $gameInstance->ask($data);
+
+        event(new \App\Events\GameInfo($gameInstance));
+    }
+
+    public function chat(Request $request)
+    {
+        $data = $request->all();
+        $gameInstanceId = $request->gameInstanceId;
+        $gameInstance = \App\Models\GameInstance::find($gameInstanceId);
+        $gameInstance = $gameInstance->chat($data);
 
         event(new \App\Events\GameInfo($gameInstance));
     }

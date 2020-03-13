@@ -19,6 +19,7 @@
   Route::get('/games/{gameInstanceId}/answer', ['as' => 'games.answer', 'uses' => 'GameController@answer']);
   Route::get('/games/{gameInstanceId}/d-hint', ['as' => 'games.d-hint', 'uses' => 'GameController@dHint']);
   Route::get('/games/{gameInstanceId}/reset', ['as' => 'games.reset', 'uses' => 'GameController@reset']);
+  Route::get('/games/{gameInstanceId}/chat', ['as' => 'games.chat', 'uses' => 'GameController@chat']);
 
   /* Helper Routes */
   Route::post('/helpers/change-locale',['as' => 'helpers.change-locale', 'uses' => 'HelperController@changeLocale']);
