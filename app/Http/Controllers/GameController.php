@@ -57,6 +57,14 @@ class GameController extends Controller
         $gameInstance = \App\Models\GameInstance::find($gameInstanceId);
         $gameInstance = $gameInstance->delete();
     }
+
+    public function newRound(Request $request)
+    {
+        $gameInstanceId = $request->gameInstanceId;
+        $gameInstance = \App\Models\GameInstance::find($gameInstanceId);
+        $gameInstance = $gameInstance->newRound();
+    }
+
     public function ask(Request $request)
     {
         $data = $request->all();
@@ -84,9 +92,13 @@ class GameController extends Controller
         $gameInstanceId = $request->gameInstanceId;
         $gameInstance = \App\Models\GameInstance::find($gameInstanceId);
         $result = $gameInstance->answer($data);
-        echo $result;
 
-        event(new \App\Events\GameInfo($gameInstance));
+        if($result)
+            event(new \App\Events\BroadCastWinner($gameInstance));
+        else
+            event(new \App\Events\GameInfo($gameInstance));
+
+        return json_encode($result);
     }
 
     public function dHint(Request $request)

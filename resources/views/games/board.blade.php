@@ -10,8 +10,9 @@
     window.laravel_echo_port='{{env("LARAVEL_ECHO_PORT")}}';
     var gameInfo = {};
     var myName = '{{ \Auth::user()->name }}';
+    var channel = "laravel_database_game";
 
-    window.Echo.channel('laravel_database_game')
+    window.Echo.channel(channel)
       .listen('.GameInfo', (e) => {
         gameInfo = JSON.parse(e.gameInfo);
         updateGameInfoView();
@@ -33,14 +34,17 @@
         updateHistory();
     });
 
-    window.Echo.channel('engame_database_game')
-      .listen('.GameReady', (e) => {
+    window.Echo.channel(channel)
+      .listen('.BroadCastWinner', (e) => {
+        alert(e.winner);
+        window.location.reload();
     });
 
     function updateGameAnswerOptionView() {
       questions = generateOptionsHtml();
       $('#options').html(questions);
     }
+
     function updateGameAnswerView() {
       $('#options').html('<div class="option" style="background: url('+gameInfo.curr_round.question.options[0].text+')"></div>');
     }
@@ -93,13 +97,16 @@
     }
 
     function setGameReady() {
+      console.log(0);
       if(gameInfo.ready_state.includes(myName))
         return true;
+      console.log(1);
 
       $.ajax({
         url: "{{ route('games.ready', ['gameInstanceId' => 1]) }}",
         method: 'GET',
         success: (ret) => {
+          console.log('i ready');
         }
       });
     }
@@ -142,6 +149,7 @@
         data: {answer: id},
         method: 'GET',
         success: (ret) => {
+          ret = JSON.parse(ret);
           if(ret) {
             Swal.fire(
               'Answered!',
@@ -150,7 +158,6 @@
             );
             return true;
           }
-
           Swal.fire(
               'Answered!',
               'Your answer a is wrong',

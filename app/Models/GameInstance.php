@@ -70,6 +70,18 @@ class GameInstance extends Model
         $this->save();
     }
 
+    public function newRound()
+    {
+        $gameInfo = json_decode($this->game_info, true);
+        $gameInfo['game_history'][] = $gameInfo['curr_round'];
+        $gameInfo['curr_round'] = self::generateRound();
+        $gameInfo['status'] = 'start';
+
+        $gameInfo = json_encode($gameInfo);
+        $this->game_info = $gameInfo;
+        $this->save();
+    }
+
     public function ask($data)
     {
         $gameInfo = json_decode($this->game_info, true);
@@ -120,7 +132,9 @@ class GameInstance extends Model
         $res = $this->checkAnswer($gameInfo, $data['answer']);
         if($res) {
             $gameInfo['curr_round']['turn_history'][] = \Auth::user()->name.' answered, and CORRECT!!! Game End!';
-            // end game
+            $gameInfo['curr_round']['winner'] = \Auth::user()->name;
+            $gameInfo['ready_state'] = [];
+            $gameInfo['status'] = 'waiting';
         } else {
             $gameInfo['curr_round']['turn_history'][] = \Auth::user()->name.' answered, but WRONG, '.\Auth::user()->name.' OUT';
             // disable user
@@ -187,6 +201,7 @@ class GameInstance extends Model
             'question' => $question,
             'current_turn' => $playerOrder[0],
             'last_turn' => $playerOrder[0],
+            'winner' => '',
             'turn_history' => []
         ];
 
@@ -207,27 +222,31 @@ class GameInstance extends Model
     {
         $d = $data['curr_round']['d_player'];
         $players = $data['players'];
-        if(!$d);
+
+        if(!$d)
             return $players[0];
-        
+
         $dIndex = array_search($d, $players);
         $dIndex = ($dIndex+1 > count($players)-1) ? 0 : $dIndex+1;
+        
         return $players[$dIndex];
     }
 
     protected static function decidePlayerOrder($data, $d)
     {
-        if(!$data['curr_round']['current_turn'])
-            $currTurn = ($data['curr_round']['current_turn']) ?
-                $data['curr_round']['current_turn'] :
-                $data['players'];
-
+        $currTurn = $data['players'];
+        if($data['curr_round']['player_order']) {
+            $prevOrder = $data['curr_round']['player_order'];
+            array_unshift($prevOrder, $data['curr_round']['d_player']);
+            $currTurn = $prevOrder;
+        }
+            
         $initial = $currTurn;
         $removed = array_shift($initial);
         $initial[] = $removed;
         
         if (($key = array_search($d, $initial)) !== false) {
-            unset($initial[$key]);
+            array_splice($initial, $key, 1);
         }
 
         return $initial;
