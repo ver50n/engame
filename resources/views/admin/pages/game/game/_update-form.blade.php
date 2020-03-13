@@ -21,6 +21,14 @@
     </div>
 
     <div class="form-group">
+      <label>@lang('common.max_player')</label>
+      <input class="form-control input-sm"
+        name="max_player"
+        value="{{old('max_player') ?: $obj->max_player}}" />
+      <span class="component__form__error-block">{{$errors->first('max_player')}}</span>
+    </div>
+
+    <div class="form-group">
       <label>@lang('common.description')</label>
       <textarea class="form-control input-sm"
         name="description">{{old('description') ?: $obj->description}}</textarea>

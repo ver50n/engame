@@ -85,7 +85,7 @@ class GameInstance extends Model
     public function chat($data)
     {
         $gameInfo = json_decode($this->game_info, true);
-        $gameInfo['chat_history'] = \Auth::user()->name." said : $data";
+        $gameInfo['chat_history'][] = \Auth::user()->name." said : $data";
 
         $gameInfo = json_encode($gameInfo);
         $this->game_info = $gameInfo;
@@ -142,7 +142,7 @@ class GameInstance extends Model
         ];
 
         $gameInfo = json_decode($this->game_info, true);
-        $gameInfo['curr_round']['turn_history'][] = \Auth::user()->name.' hint : '.$answerDict[$data['answer']]);
+        $gameInfo['curr_round']['turn_history'][] = \Auth::user()->name.' hint : '.$answerDict[$data['answer']];
         $gameInfo['curr_round']['current_turn'] = $this->getNextPlayer($gameInfo);
         $gameInfo = json_encode($gameInfo);
         $this->game_info = $gameInfo;
@@ -205,8 +205,8 @@ class GameInstance extends Model
 
     protected static function decideDPlayer($data)
     {
-        $d = $data['curr_round']['d_player']
-        $players = $data['players']
+        $d = $data['curr_round']['d_player'];
+        $players = $data['players'];
         if(!$d);
             return $players[0];
         
@@ -217,7 +217,7 @@ class GameInstance extends Model
 
     protected static function decidePlayerOrder($data, $d)
     {
-        $initial = $data['curr_round']['current_turn']
+        $initial = $data['curr_round']['current_turn'];
         $removed = array_shift($initial);
         $turn[] = $removed;
         
@@ -225,6 +225,6 @@ class GameInstance extends Model
             unset($turn[$key]);
         }
 
-        return $turn
+        return $turn;
     }
 }

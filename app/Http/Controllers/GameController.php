@@ -72,7 +72,8 @@ class GameController extends Controller
         $data = $request->all();
         $gameInstanceId = $request->gameInstanceId;
         $gameInstance = \App\Models\GameInstance::find($gameInstanceId);
-        $gameInstance = $gameInstance->chat($data);
+        
+        $gameInstance = $gameInstance->chat($data['chat']);
 
         event(new \App\Events\GameInfo($gameInstance));
     }

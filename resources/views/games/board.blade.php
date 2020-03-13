@@ -10,11 +10,10 @@
     window.laravel_echo_port='{{env("LARAVEL_ECHO_PORT")}}';
     var gameInfo = {};
     var myName = '{{ \Auth::user()->name }}';
-    
-    window.Echo.channel('engame_database_game')
+
+    window.Echo.channel('laravel_database_game')
       .listen('.GameInfo', (e) => {
         gameInfo = JSON.parse(e.gameInfo);
-        console.log(gameInfo);
         updateGameInfoView();
         if(gameInfo.status === 'ready') {
           setGameReady();
@@ -93,25 +92,6 @@
       });
     }
 
-    function chat() {
-      $.ajax({
-        url: "{{ route('games.chat', ['gameInstanceId' => 1]) }}",
-        method: 'GET',
-        success: (ret) => {
-        }
-      });
-    }
-
-    function reset() {
-      $.ajax({
-        url: "{{ route('games.reset', ['gameInstanceId' => 1]) }}",
-        method: 'GET',
-        success: (ret) => {
-          alert('game refreshed');
-        }
-      });
-    }
-
     function setGameReady() {
       if(gameInfo.ready_state.includes(myName))
         return true;
@@ -130,6 +110,28 @@
         data: {question: question},
         method: 'GET',
         success: (ret) => {
+        }
+      });
+    }
+
+    function chat(chatText) {
+      $.ajax({
+        url: "{{ route('games.chat', ['gameInstanceId' => 1]) }}",
+        data: {chat: chatText},
+        method: 'GET',
+        success: (ret) => {
+          $('.chat-text').val("");
+        }
+      });
+    }
+
+    function reset() {
+      $.ajax({
+        url: "{{ route('games.reset', ['gameInstanceId' => 1]) }}",
+        method: 'GET',
+        success: (ret) => {
+          alert('game refreshed');
+          window.location.reload();
         }
       });
     }
@@ -217,6 +219,15 @@
         });
       });
 
+      $('.chat-send').click(function() {
+        var chatText = $('.chat-text').val();
+        chat(chatText);
+      });
+      
+      $('.reset-game').click(function() {
+        reset();
+      });
+
       $('body').on('click', '.answer-question', async function() {
         id = $(this).attr('data-id');
         answerQuestion(id);
@@ -230,7 +241,7 @@
     <div class="game">
       <h3 style="text-align: center">{{ $game->name }}</h3>
       <div class="game-arena">
-        Hi, {{ \Auth::user()->name }}
+        Hi, {{ \Auth::user()->name }}<button class="reset-game">Reset Game</button>
         <div class="question" id="question"></div>
         <div class="options" id="options">
         </div>
@@ -254,8 +265,11 @@
           </div>
         </div>
       </div>
-      <div class="chat-history">
+      <div class="chat-history" id="chat-history">
+        
       </div>
+      <input type="text" class="chat-text" />
+      <button type="button" class="chat-send">Send</button>
       <div class="room-info">
         @include('games._game-stat')
       </div>

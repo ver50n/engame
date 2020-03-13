@@ -9,6 +9,10 @@
         <a href="{{ route('games.board', ['gameInstanceId' => $game->id]) }}">
           {{ $game->name }}
         </a>
+
+        <a href="{{ route('games.board', ['gameInstanceId' => $game->id]) }}">
+          {{ $game->name }}
+        </a>
       </div>
     @endforeach
     </div>
