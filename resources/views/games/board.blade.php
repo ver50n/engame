@@ -46,7 +46,15 @@
     }
 
     function updateGameAnswerView() {
-      $('#options').html('<div class="option" style="background: url('+gameInfo.curr_round.question.options[0].text+')"></div>');
+      var answer = null; 
+      var options = gameInfo.curr_round.question.options
+      for(i = 0; i < options.length; i++) {
+        if(options[i].is_answer) {
+          answer = options[i].text;
+          break;
+        }
+      }
+      $('#options').html('<div class="option" style="background: url('+answer+')"></div>');
     }
 
     function toggleAsk() {
