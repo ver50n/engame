@@ -82,7 +82,6 @@
       document.getElementById('totalUser').innerText = gameInfo.players.length;
       document.getElementById('users').innerText = gameInfo.players.join(', ');
       document.getElementById('gameStatus').innerText = gameInfo.status;
-      document.getElementById('gameRound').innerText = JSON.stringify(gameInfo.curr_round);
       document.getElementById('chat-history').innerText = JSON.stringify(gameInfo.chat_history);
     }
 
@@ -235,8 +234,9 @@
       });
 
       $('.chat-send').click(function() {
-        var chatText = $('.chat-text').val();
-        chat(chatText);
+        var chatText = $('.chat-text').val().trim();
+        if(chatText)
+          chat(chatText);
       });
       
       $('.reset-game').click(function() {
@@ -355,7 +355,8 @@
       flex-basis: 33%;
       min-height: 200px;
       border: 1px solid;
-      background-size: cover !important;
+      background-size: content !important;
       background-position: center !important;
+      background-repeat: no-repeat !important;
     }
   </style>

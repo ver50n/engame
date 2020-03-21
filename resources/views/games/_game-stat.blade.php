@@ -8,7 +8,4 @@
   Game Status : 
   <span id="gameStatus"></span>
   <br />
-  Game Round : 
-  <span id="gameRound"></span>
-  <br />
 </div>
