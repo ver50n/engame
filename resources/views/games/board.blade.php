@@ -355,7 +355,7 @@
       flex-basis: 33%;
       min-height: 200px;
       border: 1px solid;
-      background-size: content !important;
+      background-size: contain !important;
       background-position: center !important;
       background-repeat: no-repeat !important;
     }
