@@ -211,8 +211,8 @@ class GameInstance extends Model
     protected static function generateQuestion($gameId)
     {
         $question = [];
-        $max = GameQuestion::count();
-
+        $max = Question::count();
+        
 	    $gameId = rand(1, $max);
         $question = Question::find($gameId);
         $question['options'] = QuestionOption::where('question_id', $question->id)->inRandomOrder()->get();

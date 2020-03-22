@@ -104,10 +104,8 @@
     }
 
     function setGameReady() {
-      console.log(0);
       if(gameInfo.ready_state.includes(myName))
         return true;
-      console.log(1);
 
       $.ajax({
         url: "{{ route('games.ready', ['gameInstanceId' => 1]) }}",
