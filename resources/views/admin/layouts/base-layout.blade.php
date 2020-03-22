@@ -31,11 +31,8 @@
 				  </button>
 				</div>
 	    @endif
-      @yield('content')
+		@yield('content')
 		</div><br />
-		<footer class="footer">
-			Copyright &copy; 2020 Engame
-		</footer>
 	</div>
 </body>
 </html>

@@ -5,7 +5,7 @@
       'gameId' => $gameId
     ]
   ])
-	<h4>@lang('common.game') @lang('common.list-page')</h4>
+	<h4>@lang('common.question') @lang('common.list-page')</h4>
 
 	<div class="grid-action-wrapper">
 		<div class="grid-action">
@@ -37,14 +37,14 @@
         </td>
         <td>{{Lang::get('application-constant.YES_NO.'.App\Helpers\ApplicationConstant::YES_NO[$row->is_active])}}</td>
         <td>
-					<div class="grid-body-action__icon-wrapper">
-			      <a href="{{route($routePrefix.'.update', ['gameId' => $gameId, 'id' => $row->id])}}">
-			        <span class="action-icon">
-			          <i class="icon fas fa-edit" title="edit"></i>
-			        </span>
-			      </a>
-					</div>
-				</td>
+			<div class="grid-body-action__icon-wrapper">
+			<a href="{{route($routePrefix.'.update', ['gameId' => $gameId, 'id' => $row->id])}}">
+			<span class="action-icon">
+				<i class="icon fas fa-edit" title="edit"></i>
+			</span>
+			</a>
+			</div>
+		</td>
       </tr>
     @endforeach
     </tbody>

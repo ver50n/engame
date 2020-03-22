@@ -5,6 +5,9 @@
     'sns-login' => 'SNS Login',
     'email-register' => 'Email Registration',
     'sns-register' => 'SNS Registration',
+    'game' => 'Game',
+    'question' => 'Question',
+    'question-option' => 'Question Option',
 
     // Fields
     'email' => 'Email',

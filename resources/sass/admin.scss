@@ -1,0 +1,31 @@
+// Variables
+body {
+  font-size: 0.7rem;
+}
+.overlay {
+  display: none;
+}
+
+.grid-action-wrapper {
+  display: flex;
+  margin-top: 10px;
+  margin-bottom: 10px;
+  .grid-action {
+    display: inline-block;
+    margin-right: 10px;
+  }
+}
+.grid-body-image-wrapper {
+  width: 100px;
+  height: 100px;
+  .img {
+    width: 100%;
+  }
+}
+.grid-body-action__icon-wrapper {
+  display: inline-block;
+}
+
+.components__card-section-wrapper{
+  margin-bottom: 10px;
+}
