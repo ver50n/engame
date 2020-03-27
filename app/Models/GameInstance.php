@@ -215,7 +215,12 @@ class GameInstance extends Model
         
 	    $gameId = rand(1, $max);
         $question = Question::find($gameId);
-        $question['options'] = QuestionOption::where('question_id', $question->id)->inRandomOrder()->get();
+        $question['options'] = QuestionOption::where('question_id', $question->id)->take(6)->inRandomOrder()->get();
+
+        $randomIndex = rand(0, 5);
+        for($i = 0; $i < count($question['options']); $i++) {
+            $question['options'][$randomIndex]['is_answer'] = 1;
+        }
 
         return $question;
     }
