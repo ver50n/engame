@@ -152,7 +152,8 @@ class GameInstance extends Model
         $answerDict = [
             0 => 'No',
             1 => 'Yes',
-            2 => 'Hmmm'
+            2 => 'Not Sure',
+            3 => 'Q Is Open'
         ];
 
         $gameInfo = json_decode($this->game_info, true);

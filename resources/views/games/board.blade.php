@@ -11,6 +11,7 @@
     var gameInfo = {};
     var myName = '{{ \Auth::user()->name }}';
     var channel = "laravel_database_game";
+    var dAnswer = null;
 
     window.Echo.channel(channel)
       .listen('.GameInfo', (e) => {
@@ -87,7 +88,7 @@
 
     function updateHistory() {
       historyHtml = '';
-      histories = gameInfo.curr_round.turn_history;
+      histories = gameInfo.curr_round.turn_history.reverse();
       for(i = 0; i < histories.length; i++) {
         historyHtml += histories[i]+'<br />';
       }
@@ -180,10 +181,12 @@
         success: (ret) => {
 
           Swal.fire(
-              'Answered!',
-              'Your have answered a question from user',
-              'success'
-            );
+            'Answered!',
+            'Your have answered a question from user',
+            'success'
+          );
+          dAnswer = null;
+          resetSelectedAnswer();
         }
       });
     }
@@ -195,6 +198,18 @@
         optionsTxt += '<div class="option" style="background: url('+option.text+');"></div>';
       });
       $('.options').html(optionsTxt); 
+    }
+
+    function resetSelectedAnswer() {
+      $('.answer-question').removeClass('selected-answer');
+    }
+
+    function selectedAnswer(id) {
+      resetSelectedAnswer();
+      $('.answer-question').each(function() {
+        if($(this).attr('data-id') === id)
+          $(this).addClass('selected-answer');
+      });
     }
 
     $(document).ready(function() {
@@ -229,6 +244,10 @@
             answer(id);
           }
         });
+        if(selected) {
+          //if(selected === id)
+            // answer(id);
+        }
       });
 
       $('.chat-send').click(function() {
@@ -241,9 +260,16 @@
         reset();
       });
 
-      $('body').on('click', '.answer-question', async function() {
+      $('body').on('click', '.answer-question', function() {
         id = $(this).attr('data-id');
-        answerQuestion(id);
+        prevAnswer = dAnswer;
+        dAnswer = id;
+        selectedAnswer(id);
+
+        if(dAnswer === prevAnswer) {
+          answerQuestion(id);
+        }
+        prevAnswer = null;
       });
     });
 
@@ -268,13 +294,16 @@
           </div>
 
           <div class="btn-primary btn-action answer-question yes hide" data-id="1">
-            Yes
+            <div>Yes</div>
           </div>
           <div class="btn-primary btn-action answer-question no hide" data-id="0">
-            No
+            <div>No</div>
           </div>
           <div class="btn-primary btn-action answer-question no hide" data-id="2">
-            Hmmm...
+            <div>Not Sure</div>
+          </div>
+          <div class="btn-primary btn-action answer-question no hide" data-id="3">
+            <div>Q is Open</div>
           </div>
         </div>
       </div>
@@ -356,5 +385,22 @@
       background-size: contain !important;
       background-position: center !important;
       background-repeat: no-repeat !important;
+    }
+
+    .button-wrapper {
+      display: flex;
+    }
+    .answer-question {
+      width: 100%;
+      height: 100px;
+      border-radius: 5px;
+      margin-right: 5px;
+      text-align: center;
+    }
+    .answer-question div {
+      margin-top: 25%;
+    }
+    .selected-answer {
+      background: red !important;
     }
   </style>
