@@ -65,6 +65,7 @@
     }
 
     function toggleAnswerQuestion() {
+      $('.ask').addClass('hide');
       $('.answer-question').addClass('hide');
       if(gameInfo.curr_round.current_turn == myName)
         $('.answer-question').removeClass('hide');
