@@ -37,7 +37,25 @@
 
     window.Echo.channel(channel)
       .listen('.BroadCastWinner', (e) => {
-        alert(e.winner);
+        Swal.fire({
+          icon: 'success',
+          title: e.winner+' has won the game',
+          text: 'Game board will be refreshed',
+          showConfirmButton: false,
+          timer: 1500
+        })
+        window.location.reload();
+    });
+    
+    window.Echo.channel(channel)
+      .listen('.GameReset', (e) => {
+        Swal.fire({
+          icon: 'success',
+          title: 'Game Reset',
+          text: 'Game board will be refreshed',
+          showConfirmButton: false,
+          timer: 1500
+        })
         window.location.reload();
     });
 
@@ -75,7 +93,7 @@
       var optionHtml = "";
       options = gameInfo.curr_round.question.options;
       for(i = 0; i < options.length; i++) {
-        optionHtml += '<div class="option" style="background: url('+options[i].text+')" data-id="'+options[i].id+'"></div>';
+        optionHtml += '<div class="option selectableAnswer" style="background: url('+options[i].text+')" data-id="'+options[i].id+'"></div>';
       }
       return optionHtml;
     }
@@ -113,7 +131,6 @@
         url: "{{ route('games.ready', ['gameInstanceId' => 1]) }}",
         method: 'GET',
         success: (ret) => {
-          console.log('i ready');
         }
       });
     }
@@ -144,8 +161,6 @@
         url: "{{ route('games.reset', ['gameInstanceId' => 1]) }}",
         method: 'GET',
         success: (ret) => {
-          alert('game refreshed');
-          window.location.reload();
         }
       });
     }
@@ -158,18 +173,22 @@
         success: (ret) => {
           ret = JSON.parse(ret);
           if(ret) {
-            Swal.fire(
-              'Answered!',
-              'You answer is correct',
-              'success'
-            );
+            Swal.fire({
+              icon: 'success',
+              title: 'Answered',
+              text: 'Your answer is correct',
+              showConfirmButton: false,
+              timer: 1500
+            });
             return true;
           }
-          Swal.fire(
-              'Answered!',
-              'Your answer a is wrong',
-              'error'
-            );
+          Swal.fire({
+            icon: 'error',
+            title: 'Answered',
+            text: 'Your answer is wrong',
+            showConfirmButton: false,
+            timer: 1500
+          });
         }
       });
     }
@@ -180,12 +199,13 @@
         data: {answer: id},
         method: 'GET',
         success: (ret) => {
-
-          Swal.fire(
-            'Answered!',
-            'Your have answered a question from user',
-            'success'
-          );
+          Swal.fire({
+            icon: 'success',
+            title: 'Hinted',
+            text: 'Your have answered a question from user',
+            showConfirmButton: false,
+            timer: 1500
+          });
           dAnswer = null;
           resetSelectedAnswer();
         }
@@ -230,7 +250,7 @@
         }
       });
 
-      $('body').on('click', '.option', async function() {
+      $('body').on('click', '.selectableAnswer', async function() {
         id = $(this).attr('data-id');
         Swal.fire({
           title: 'Are you sure to answer this?',
@@ -300,11 +320,11 @@
           <div class="btn-primary btn-action answer-question no hide" data-id="0">
             <div>No</div>
           </div>
+          <div class="btn-primary btn-action answer-question no hide" data-id="3">
+            <div>Yes but maybe not clearly</div>
+          </div>
           <div class="btn-primary btn-action answer-question no hide" data-id="2">
             <div>Not Sure</div>
-          </div>
-          <div class="btn-primary btn-action answer-question no hide" data-id="3">
-            <div>Q is Open</div>
           </div>
         </div>
       </div>

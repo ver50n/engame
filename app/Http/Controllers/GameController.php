@@ -56,6 +56,8 @@ class GameController extends Controller
         $gameInstanceId = $request->gameInstanceId;
         $gameInstance = \App\Models\GameInstance::find($gameInstanceId);
         $gameInstance = $gameInstance->delete();
+
+        event(new \App\Events\GameReset());
     }
 
     public function newRound(Request $request)
