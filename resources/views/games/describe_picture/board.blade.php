@@ -116,7 +116,7 @@
 
     function join() {
       $.ajax({
-        url: "{{ route('games.join', ['gameInstanceId' => 1]) }}",
+        url: "{{ route('games.join', ['gameInstanceId' => 3]) }}",
         method: 'GET',
         success: (ret) => {
         }
@@ -128,7 +128,7 @@
         return true;
 
       $.ajax({
-        url: "{{ route('games.ready', ['gameInstanceId' => 1]) }}",
+        url: "{{ route('games.ready', ['gameInstanceId' => 3]) }}",
         method: 'GET',
         success: (ret) => {
         }
@@ -137,7 +137,7 @@
 
     function ask(question) {
       $.ajax({
-        url: "{{ route('games.ask', ['gameInstanceId' => 1]) }}",
+        url: "{{ route('games.ask', ['gameInstanceId' => 3]) }}",
         data: {question: question},
         method: 'GET',
         success: (ret) => {
@@ -147,7 +147,7 @@
 
     function chat(chatText) {
       $.ajax({
-        url: "{{ route('games.chat', ['gameInstanceId' => 1]) }}",
+        url: "{{ route('games.chat', ['gameInstanceId' => 3]) }}",
         data: {chat: chatText},
         method: 'GET',
         success: (ret) => {
@@ -158,7 +158,7 @@
 
     function reset() {
       $.ajax({
-        url: "{{ route('games.reset', ['gameInstanceId' => 1]) }}",
+        url: "{{ route('games.reset', ['gameInstanceId' => 3]) }}",
         method: 'GET',
         success: (ret) => {
         }
@@ -167,7 +167,7 @@
 
     function answer(id) {
       $.ajax({
-        url: "{{ route('games.answer', ['gameInstanceId' => 1]) }}",
+        url: "{{ route('games.answer', ['gameInstanceId' => 3]) }}",
         data: {answer: id},
         method: 'GET',
         success: (ret) => {
@@ -195,7 +195,7 @@
 
     function answerQuestion(id) {
       $.ajax({
-        url: "{{ route('games.d-hint', ['gameInstanceId' => 1]) }}",
+        url: "{{ route('games.d-hint', ['gameInstanceId' => 3]) }}",
         data: {answer: id},
         method: 'GET',
         success: (ret) => {
@@ -406,6 +406,11 @@
       background-size: contain !important;
       background-position: center !important;
       background-repeat: no-repeat !important;
+    }
+
+    .ask {
+      width: 100%;
+      height: 100%;
     }
 
     .button-wrapper {

@@ -15,11 +15,11 @@ class BroadCastWinner implements ShouldBroadcast
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
-    public $gameInfo;
+    public $gameInstanceId;
 
-    public function __construct($gameInstance)
+    public function __construct($gameInstanceId)
     {
-        $this->gameInfo = $gameInstance;
+        $this->gameInstanceId = $gameInstanceId;
     }
     
     public function broadcastOn()
@@ -29,7 +29,7 @@ class BroadCastWinner implements ShouldBroadcast
 
     public function broadcastWith()
     {
-        $gameInstance = \App\Models\GameInstance::where('id', 1)->first();
+        $gameInstance = \App\Models\GameInstance::where('id', $this->gameInstanceId)->first();
 
         $gameInfo = json_decode($gameInstance->game_info, true);
         $winner = $gameInfo['curr_round']['winner']." WIN!!";

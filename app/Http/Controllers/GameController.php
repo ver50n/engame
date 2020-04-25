@@ -20,11 +20,23 @@ class GameController extends Controller
     {
         $gameInstanceId = $request->gameInstanceId;
         $game = \App\Models\Game::where([
-            'id' => 1,
+            'id' => $gameInstanceId,
             'is_active' => 1
         ])->firstOrFail();
+        $viewName = 'yes_no';
 
-        return view('games.board', [
+        switch($game->id) {
+            case 1:
+                $viewName = 'yes_no';
+                break;
+            case 2:
+                $viewName = 'open_question';
+                break;
+            case 3:
+                $viewName = 'describe_picture';
+                break;
+        } 
+        return view("games.$viewName.board", [
             'game' => $game
         ]);
     }
@@ -34,12 +46,12 @@ class GameController extends Controller
         $gameInstanceId = $request->gameInstanceId;
 
         $game = \App\Models\Game::where([
-            'id' => 1,
+            'id' => $gameInstanceId,
             'is_active' => 1
         ])->firstOrFail();
         $gameInstance = \App\Models\GameInstance::joinGame($game, $gameInstanceId);
 
-        event(new \App\Events\GameInfo($gameInstance));
+        event(new \App\Events\GameInfo($gameInstanceId));
     }
 
     public function ready(Request $request)
@@ -48,7 +60,7 @@ class GameController extends Controller
         $gameInstance = \App\Models\GameInstance::find($gameInstanceId);
         $gameInstance = $gameInstance->readyGame();
 
-        event(new \App\Events\GameInfo($gameInstance));
+        event(new \App\Events\GameInfo($gameInstanceId));
     }
 
     public function reset(Request $request)
@@ -74,7 +86,7 @@ class GameController extends Controller
         $gameInstance = \App\Models\GameInstance::find($gameInstanceId);
         $gameInstance = $gameInstance->ask($data);
 
-        event(new \App\Events\GameInfo($gameInstance));
+        event(new \App\Events\GameInfo($gameInstanceId));
     }
 
     public function chat(Request $request)
@@ -85,7 +97,7 @@ class GameController extends Controller
         
         $gameInstance = $gameInstance->chat($data['chat']);
 
-        event(new \App\Events\GameInfo($gameInstance));
+        event(new \App\Events\GameInfo($gameInstanceId));
     }
 
     public function answer(Request $request)
@@ -96,9 +108,9 @@ class GameController extends Controller
         $result = $gameInstance->answer($data);
 
         if($result)
-            event(new \App\Events\BroadCastWinner($gameInstance));
+            event(new \App\Events\BroadCastWinner($gameInstanceId));
         else
-            event(new \App\Events\GameInfo($gameInstance));
+            event(new \App\Events\GameInfo($gameInstanceId));
 
         return json_encode($result);
     }
@@ -109,9 +121,9 @@ class GameController extends Controller
         $gameInstanceId = $request->gameInstanceId;
         $gameInstance = \App\Models\GameInstance::find($gameInstanceId);
         $gameInfo = json_decode($gameInstance->game_info, true);
-        $gameInstance = $gameInstance->dHint($data);
+        $gameInstance = $gameInstance->dHintOpenText($data);
 
-        event(new \App\Events\GameInfo($gameInstance));
+        event(new \App\Events\GameInfo($gameInstanceId));
     }
 
     public function disconnect(Request $request)
@@ -120,7 +132,7 @@ class GameController extends Controller
         $gameInstance = \App\Models\GameInstance::find($gameInstanceId);
         $gameInstance = $gameInstance->leaveGame();
 
-        event(new \App\Events\GameInfo($gameInstance));
+        event(new \App\Events\GameInfo($gameInstanceId));
     }
 
     public function getQuestion(Request $request)

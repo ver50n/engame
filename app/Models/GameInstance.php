@@ -164,6 +164,17 @@ class GameInstance extends Model
         $this->save();
     }
 
+    public function dHintOpenText($data)
+    {
+        $gameInfo = json_decode($this->game_info, true);
+        $gameInfo['curr_round']['turn_history'][] = \Auth::user()->name.' hint : '.$data['answer'];
+        $gameInfo['curr_round']['current_turn'] = $this->getNextPlayer($gameInfo);
+        $gameInfo = json_encode($gameInfo);
+        $this->game_info = $gameInfo;
+        $this->save();
+
+    }
+
     public function checkAnswer($gameInfo, $answer)
     {
         $options = $gameInfo['curr_round']['question']['options'];

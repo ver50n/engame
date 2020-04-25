@@ -15,11 +15,11 @@ class GameInfo implements ShouldBroadcast
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
-    public $gameInfo;
+    public $gameInstanceId;
 
-    public function __construct($gameInstance)
+    public function __construct($gameInstanceId)
     {
-        $this->gameInfo = $gameInstance;
+        $this->gameInstanceId = $gameInstanceId;
     }
     
     public function broadcastOn()
@@ -29,7 +29,7 @@ class GameInfo implements ShouldBroadcast
 
     public function broadcastWith()
     {
-        $gameInstance = \App\Models\GameInstance::where('id', 1)->first();
+        $gameInstance = \App\Models\GameInstance::where('id', $this->gameInstanceId)->first();
         return ['gameInfo' => $gameInstance->game_info];
     }
 
