@@ -310,10 +310,10 @@
           </div>
 
           <div class="wrapper answer-question hide">
-            <textarea class="hint-text">
+            <textarea class="hint-text" style="float: left;">
             </textarea>
             <div class="btn-primary btn-action hint-answer"
-              style="width:100px; height: 100px; margin-top: 0;">
+              style="width:100px; height: 52px; margin-top: 0; float: left;">
               Answer
             </div>
           </div>
